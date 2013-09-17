@@ -1,0 +1,40 @@
+#!/bin/sh
+function deactivate() {
+  if [ -n "$GOENVNAME" ]; then
+    unset GOENVNAME
+  fi
+
+  if [ -n "$_OLD_GOROOT" ]; then
+    export GOROOT="$_OLD_GOROOT"
+    unset _OLD_GOROOT
+  fi
+
+  if [ -n "$_OLD_PS1" ]; then
+    export PS1="$_OLD_PS1"
+    unset _OLD_PS1
+  fi
+
+  if [ -n "$_OLD_PATH" ]; then
+    export PATH="$_OLD_PATH"
+    unset _OLD_PATH
+  fi
+
+  export GOPATH="$_OLD_GOPATH"
+ 
+  if [ "$1" != "init" ]; then
+    unset -f deactivate
+  fi
+}
+
+deactivate init
+
+export _OLD_PATH="$PATH"
+export _OLD_GOPATH="$GOPATH"
+export _OLD_GOROOT="$GOROOT"
+export _OLD_PS1="$PS1"
+export GOENVNAME="."
+export PS1="(go:.) $_OLD_PS1"
+# 修改这里为自己项目的路径, 这个是使用 goenv(https://bitbucket.org/ymotongpoo/goenv) 生成的
+export GOPATH=/Users/wyatt/Programer/golang/autorun
+export PATH="$GOPATH/bin":$PATH
+
